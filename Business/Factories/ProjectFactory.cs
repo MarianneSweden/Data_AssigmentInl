@@ -12,7 +12,7 @@ public static class ProjectFactory
 
         var project = new ProjectEntity
         {
-          //  Id = model.Id,
+          Id = model.Id,
             ProjectNumber = model.ProjectNumber,
             ProjectName = model.ProjectName,
             Description = model.Description,
@@ -40,7 +40,7 @@ public static class ProjectFactory
     {
         return new ProjectModel
         {
-           // Id = entity.Id,
+            Id = entity.Id,
             ProjectNumber = entity.ProjectNumber,
             ProjectName = entity.ProjectName,
             Description = entity.Description,
