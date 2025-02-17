@@ -1,7 +1,7 @@
 ﻿using Business.Models;
 using Business.Factories;
 using Data.Interfaces;
-using Microsoft.EntityFrameworkCore.Storage;
+
 
 namespace Business.Services
 {
@@ -50,9 +50,10 @@ namespace Business.Services
             return projects.Select(ProjectFactory.CreateFromEntity);
         }
 
+        
+
         public async Task UpdateProjectAsync(ProjectModel model)
         {
-            using var transaction = await _projectRepository.BeginTransactionAsync();
             try
             {
                 var entity = await _projectRepository.GetByIdAsync(model.Id);
@@ -65,29 +66,50 @@ namespace Business.Services
                     entity.EstimatedHours = model.EstimatedHours;
                     entity.PricePerHour = model.PricePerHour;
 
-                    // Calculte total price
-                    decimal estimatedHours = entity.EstimatedHours ?? 0;
-                    decimal pricePerHour = entity.PricePerHour ?? 0;
-                    entity.TotalPrice = estimatedHours * pricePerHour;
-
-                    Console.WriteLine($"Updating project: {entity.ProjectName}, New TotalPrice: {entity.TotalPrice}");
+                    // Calculate total price
+                    entity.TotalPrice = (entity.EstimatedHours ?? 0) * (entity.PricePerHour ?? 0);
 
                     await _projectRepository.UpdateAsync(entity);
-                    await transaction.CommitAsync();
-
-                    Console.WriteLine($"Project '{entity.ProjectName}' has been updated!");
+                    Console.WriteLine($"Project {entity.ProjectName} has been updated!");
                 }
                 else
                 {
-                    Console.WriteLine($"Project with ID {model.Id} was not found.");
+                    Console.WriteLine($"Project with ID {model.Id} not found.");
                 }
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
-                Console.WriteLine($"Error updating project, transaction rolled back: {ex.Message}");
+                Console.WriteLine($"Error updating project: {ex.Message}");
             }
         }
+
+
+        //Delete
+        public async Task<bool> DeleteProjectAsync(int id)
+        {
+            try
+            {
+                var project = await _projectRepository.GetByIdAsync(id);
+                if (project == null)
+                {
+                    Console.WriteLine("Project not found.");
+                    return false;
+                }
+
+                await _projectRepository.DeleteAsync(id);
+                Console.WriteLine("Project deleted successfully.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting project: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
+
 
         public async Task<ProjectModel?> GetProjectByIdAsync(int id)
         {

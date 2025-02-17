@@ -3,6 +3,7 @@ using Data.Entities;
 
 namespace Business.Factories
 {
+
     public static class UserFactory
     {
 

@@ -33,22 +33,23 @@ namespace Data.Repositories
             return await _dbSet.FirstOrDefaultAsync(expression);
         }
 
+        
         // Add
-
         public virtual async Task AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity); // Använd _dbSet istället för _context.Set<T>()
+            await _dbSet.AddAsync(entity); 
             await _context.SaveChangesAsync();
         }
 
 
 
-        // Update(make the method virtual)
+        // Update
         public virtual async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }
+
 
         // Delete
         public async Task<bool> DeleteAsync(int id)
@@ -62,5 +63,8 @@ namespace Data.Repositories
             }
             return false;
         }
+
+
+
     }
 }

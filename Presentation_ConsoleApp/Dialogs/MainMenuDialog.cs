@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Business.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Business.Services;
 using Microsoft.Extensions.DependencyInjection;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace Presentation_ConsoleApp.Dialogs
 {
@@ -22,7 +19,7 @@ namespace Presentation_ConsoleApp.Dialogs
                                UserService userService)
         {
             _serviceProvider = serviceProvider;
-            _projectService = projectService;
+          _projectService = projectService;
             _customerService = customerService;
             _productService = productService;
             _userService = userService;
