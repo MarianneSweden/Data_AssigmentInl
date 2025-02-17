@@ -1,6 +1,7 @@
 ﻿using Business.Models;
 using Business.Factories;
 using Data.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Business.Services
 {
@@ -15,10 +16,10 @@ namespace Business.Services
 
         public async Task AddProjectAsync(ProjectModel model)
         {
+            using var transaction = await _projectRepository.BeginTransactionAsync();
             try
             {
                 var entity = ProjectFactory.Create(model);
-
 
                 // Generera unikt projektnummer
                 entity.ProjectNumber = await _projectRepository.GenerateNextProjectNumberAsync();
@@ -26,17 +27,17 @@ namespace Business.Services
                 // Beräkna TotalPrice
                 entity.TotalPrice = (entity.PricePerHour ?? 0) * (entity.EstimatedHours ?? 0);
 
-                await _projectRepository.AddAsync(entity);
-
-                //Console.WriteLine($"Försöker spara: {entity.ProjectName}");
+                Console.WriteLine($"Försöker spara projekt: {entity.ProjectName}, ProjectNumber: {entity.ProjectNumber}, TotalPrice: {entity.TotalPrice}");
 
                 await _projectRepository.AddAsync(entity);
+                await transaction.CommitAsync();
 
-                Console.WriteLine($"Projekt {entity.ProjectName} har sparats i databasen!");
+                Console.WriteLine($"Projekt '{entity.ProjectName}' har sparats i databasen!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fel vid sparande av projekt: {ex.Message}");
+                await transaction.RollbackAsync();
+                Console.WriteLine($"Fel vid sparande av projekt, transaktionen rullades tillbaka: {ex.Message}");
             }
         }
 
@@ -48,6 +49,7 @@ namespace Business.Services
 
         public async Task UpdateProjectAsync(ProjectModel model)
         {
+            using var transaction = await _projectRepository.BeginTransactionAsync();
             try
             {
                 var entity = await _projectRepository.GetByIdAsync(model.Id);
@@ -68,8 +70,9 @@ namespace Business.Services
                     Console.WriteLine($"Uppdaterar projekt: {entity.ProjectName}, Nytt TotalPrice: {entity.TotalPrice}");
 
                     await _projectRepository.UpdateAsync(entity);
+                    await transaction.CommitAsync();
 
-                    Console.WriteLine($"Projekt {entity.ProjectName} har uppdaterats!");
+                    Console.WriteLine($"Projekt '{entity.ProjectName}' har uppdaterats!");
                 }
                 else
                 {
@@ -78,7 +81,8 @@ namespace Business.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fel vid uppdatering av projekt: {ex.Message}");
+                await transaction.RollbackAsync();
+                Console.WriteLine($"Fel vid uppdatering av projekt, transaktionen rullades tillbaka: {ex.Message}");
             }
         }
 

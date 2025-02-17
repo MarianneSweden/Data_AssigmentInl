@@ -4,6 +4,7 @@ using Data.Entities;
 using Data.Interfaces;
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Data.Repositories
 {
@@ -62,6 +63,12 @@ namespace Data.Repositories
                 }
             }
         }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
+
 
     }
 }
