@@ -15,32 +15,26 @@ namespace Data.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        // Hämta alla 
+        // Get all 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }
 
-        // Hämta ID
+        // Get ID
         public async Task<T?> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        // Hämta en valfri post
+      
         public async Task<T?> GetAsync(Expression<Func<T, bool>> expression)
         {
             return await _dbSet.FirstOrDefaultAsync(expression);
         }
 
-        // Lägg till 
-        //public virtual async Task AddAsync(T entity)
-        //{
-        //  await _context.Set<T>().AddAsync(entity);
-        //await _context.SaveChangesAsync();
-        //}
+        // Add
 
-        //Chatgpt istället för den lägg till över, det sparas ner men jag får ändå ett fel när jag sparar ner projektet... Nåt med ID att göra
         public virtual async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity); // Använd _dbSet istället för _context.Set<T>()
@@ -49,14 +43,14 @@ namespace Data.Repositories
 
 
 
-        // Uppdatera (gör metoden virtual)
+        // Update(make the method virtual)
         public virtual async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }
 
-        // Ta bort en post
+        // Delete
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _dbSet.FindAsync(id);

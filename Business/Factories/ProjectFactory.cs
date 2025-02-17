@@ -27,7 +27,7 @@ public static class ProjectFactory
             TotalPrice = (model.PricePerHour ) * (model.EstimatedHours ?? 0)
         };
 
-        // Beräkna TotalPrice
+        // Calculate total price
         if (model.EstimatedHours.HasValue && model.EstimatedHours > 0)
         {
             project.TotalPrice = (model.TotalPrice ?? 0m); 

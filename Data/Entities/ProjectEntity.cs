@@ -7,8 +7,8 @@ namespace Data.Entities
     public class ProjectEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] //Ska ska auto ID på projektet
-        public int Id { get; set; } //Projektnummer.. nåt galet blir det..
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
+        public int Id { get; set; } 
 
         [Required]
         [MaxLength(20)]

@@ -21,23 +21,26 @@ namespace Business.Services
             {
                 var entity = ProjectFactory.Create(model);
 
-                // Generera unikt projektnummer
+
+                //Generate unique project number
                 entity.ProjectNumber = await _projectRepository.GenerateNextProjectNumberAsync();
 
-                // Beräkna TotalPrice
+                //Calculate TotalPrice
                 entity.TotalPrice = (entity.PricePerHour ?? 0) * (entity.EstimatedHours ?? 0);
 
-                Console.WriteLine($"Försöker spara projekt: {entity.ProjectName}, ProjectNumber: {entity.ProjectNumber}, TotalPrice: {entity.TotalPrice}");
+               
 
                 await _projectRepository.AddAsync(entity);
                 await transaction.CommitAsync();
 
-                Console.WriteLine($"Projekt '{entity.ProjectName}' har sparats i databasen!");
+               // Console.WriteLine($"Project '{entity.ProjectName}' has been saved to the database!
+             
+                 Console.WriteLine($"Save project: {entity.ProjectName}, ProjectNumber: {entity.ProjectNumber}, TotalPrice: {entity.TotalPrice}");
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                Console.WriteLine($"Fel vid sparande av projekt, transaktionen rullades tillbaka: {ex.Message}");
+                Console.WriteLine($"Error saving project, transaction rolled back: {ex.Message}");
             }
         }
 
@@ -62,27 +65,27 @@ namespace Business.Services
                     entity.EstimatedHours = model.EstimatedHours;
                     entity.PricePerHour = model.PricePerHour;
 
-                    // Beräkna totalpris
+                    // Calculte total price
                     decimal estimatedHours = entity.EstimatedHours ?? 0;
                     decimal pricePerHour = entity.PricePerHour ?? 0;
                     entity.TotalPrice = estimatedHours * pricePerHour;
 
-                    Console.WriteLine($"Uppdaterar projekt: {entity.ProjectName}, Nytt TotalPrice: {entity.TotalPrice}");
+                    Console.WriteLine($"Updating project: {entity.ProjectName}, New TotalPrice: {entity.TotalPrice}");
 
                     await _projectRepository.UpdateAsync(entity);
                     await transaction.CommitAsync();
 
-                    Console.WriteLine($"Projekt '{entity.ProjectName}' har uppdaterats!");
+                    Console.WriteLine($"Project '{entity.ProjectName}' has been updated!");
                 }
                 else
                 {
-                    Console.WriteLine($"Projekt med ID {model.Id} hittades inte.");
+                    Console.WriteLine($"Project with ID {model.Id} was not found.");
                 }
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                Console.WriteLine($"Fel vid uppdatering av projekt, transaktionen rullades tillbaka: {ex.Message}");
+                Console.WriteLine($"Error updating project, transaction rolled back: {ex.Message}");
             }
         }
 

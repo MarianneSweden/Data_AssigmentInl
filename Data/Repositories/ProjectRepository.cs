@@ -5,6 +5,7 @@ using Data.Interfaces;
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Data.Repositories
 {
@@ -20,23 +21,27 @@ namespace Data.Repositories
         public async Task<string> GenerateNextProjectNumberAsync()
         {
             // Hämtar senaste projektnumret
+            // Retrieves the latest project number
+
             var lastProject = await _context.Projects
                 .OrderByDescending(p => p.Id)
                 .FirstOrDefaultAsync();
 
-            // Om det inte finns några projekt, börja på P-1000, fungerar inte just nu
+            // Om det inte finns några projekt, börja på P-1000
+            //If there are no projects, start on P - 1000
             if (lastProject == null || string.IsNullOrWhiteSpace(lastProject.ProjectNumber))
                 return "P-1000";
 
             // Kontrollera att formatet är korrekt innan vi försöker splitta
+            //Check that the format is correct before we attempt to split
             var parts = lastProject.ProjectNumber.Split('-');
             if (parts.Length < 2 || !int.TryParse(parts[1], out int lastNumber))
             {
-                Console.WriteLine("Felaktigt projektnummerformat, återgår till P-1000");
+                Console.WriteLine("Incorrect project number format, reverting to P-1000");
                 return "P-1000";
             }
 
-            // Öka med 1
+            // Increase by 1
             int nextNumber = lastNumber + 1;
             return $"P-{nextNumber}";
         }
@@ -45,18 +50,18 @@ namespace Data.Repositories
         {
             try
             {
-                Console.WriteLine($"Försöker spara i databasen: {entity.ProjectName} ");
+               // Console.WriteLine($"Försöker spara i databasen: {entity.ProjectName} ");
 
                 await _context.Projects.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
-                Console.WriteLine("Projekt sparat i databasen!");
+                Console.WriteLine("Project saved in the database!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fel vid sparande i databasen: {ex.Message}");
+                Console.WriteLine($"Error when saving to the database: {ex.Message}");
 
-                // Skriv ut inner exception om den finns
+                // Print inner exception if present
                 if (ex.InnerException != null)
                 {
                     Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");

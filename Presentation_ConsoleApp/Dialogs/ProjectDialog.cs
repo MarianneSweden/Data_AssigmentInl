@@ -139,7 +139,7 @@ public class ProjectDialog
         foreach (var project in projects)
         {
             string endDateText = project.EndDate?.ToString("yyyy-MM-dd") ?? "Ongoing";
-            Console.WriteLine($" {project.Id} - {project.ProjectName}, {project.StartDate:yyyy-MM-dd} to {endDateText}, Status: {GetStatusName(project.StatusId)}, Price: {project.PricePerHour:C} /h, Estimated hours: {project.EstimatedHours}");
+            Console.WriteLine($" {project.ProjectNumber} - {project.ProjectName}, {project.StartDate:yyyy-MM-dd} to {endDateText}, Status: {GetStatusName(project.StatusId)}, Price: {project.PricePerHour:C} /h, Estimated hours: {project.EstimatedHours}");
         }
     }
 

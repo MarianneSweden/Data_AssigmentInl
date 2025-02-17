@@ -38,7 +38,7 @@ namespace Presentation_ConsoleApp.Dialogs
                         await ShowAllUsersAsync();
                         break;
                     case "3":
-                        return; // Tillbaka till huvudmenyn
+                        return; 
                     default:
                         Console.WriteLine("Wrong choice. Try again.");
                         break;

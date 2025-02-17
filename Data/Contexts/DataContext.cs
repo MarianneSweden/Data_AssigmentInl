@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Data.Entities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Data.Contexts;
 
@@ -12,7 +13,9 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Se till att ProductEntity.Price har rätt datatyp i databasen
+        
+        //Ensure that ProductEntity.Price has the correct data type in the database
+
         modelBuilder.Entity<ProductEntity>()
             .Property(p => p.Price)
             .HasColumnType("decimal(18,2)");
@@ -23,7 +26,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
 
         modelBuilder.Entity<ProjectEntity>()
             .HasIndex(p => p.ProjectNumber)
-            .IsUnique(); // Gör ProjectNumber unikt
+            .IsUnique();
 
         base.OnModelCreating(modelBuilder);
     }

@@ -9,14 +9,14 @@ namespace Business.Factories
     {
         public static void AddBusinessServices(this IServiceCollection services)
         {
-            // Registrera Repositories
+            // Register Repositories
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IStatusTypeRepository, StatusTypeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
-            // Registrera Services
+            // Register Services
             services.AddScoped<CustomerService>();
             services.AddScoped<ProductService>();
             services.AddScoped<ProjectService>();

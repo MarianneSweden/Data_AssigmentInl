@@ -15,18 +15,18 @@ var services = new ServiceCollection()
     .AddScoped<IProjectRepository, ProjectRepository>()
     .AddScoped<ICustomerRepository, CustomerRepository>()
     .AddScoped<IProductRepository, ProductRepository>()
-    .AddScoped<IUserRepository, UserRepository>() // NYTT
+    .AddScoped<IUserRepository, UserRepository>() 
 
     .AddScoped<CustomerService>()
     .AddScoped<ProjectService>()
     .AddScoped<ProductService>()
-    .AddScoped<UserService>() // NYTT
+    .AddScoped<UserService>() 
 
     .AddScoped<MainMenuDialog>()
     .AddScoped<CustomerDialog>()
     .AddScoped<ProjectDialog>()
     .AddScoped<ProductDialog>()
-    .AddScoped<UserDialog>(); // NYTT
+    .AddScoped<UserDialog>(); 
 
 using var serviceProvider = services.BuildServiceProvider();
 
